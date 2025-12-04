@@ -60,18 +60,17 @@ if module == "Single Asset (Quant A)":
     st.info("Ton binôme pourra coder ici plus tard (backtest, graph, metrics).")
 
 # --------------------------------------------------
-# MODULE B : PORTFOLIO (ta partie)
+# Quant B : 
 # --------------------------------------------------
 else:
-    st.subheader("Module Portfolio Multi-Assets")
+    st.subheader("Quant B: Portfolio Multi-Assets")
 
     st.write("""
     Construis un portefeuille d'actions du CAC 40 :
-    - Choisis plusieurs actions
     - Ajuste les poids
     - Visualise la performance cumulée
-    - Observe la matrice de corrélation
-    - Vois Sharpe, volatilité et max drawdown
+    - Matrice de corrélation
+    - Sharpe ratio, Volatilité et Mark down
     """)
 
     # 1) Choix des actifs
@@ -88,7 +87,7 @@ else:
     tickers = [CAC40_ASSETS[a] for a in selected_assets]
 
     # 2) Choix des poids
-    st.subheader("⚖️ Poids du portefeuille")
+    st.subheader(" Poids des assets dans le portefeuille")
     weights = []
     total_weight = 0
 
@@ -105,7 +104,7 @@ else:
         st.info("Les poids ont été renormalisés pour sommer à 1.")
 
     # 3) Chargement des prix
-    st.subheader("📥 Chargement des données")
+    st.subheader("Chargement des données")
     data = load_prices(tickers)
     returns = data.pct_change().dropna()
 
@@ -115,7 +114,7 @@ else:
     # 4) Performance du portefeuille
     port_returns, cum_perf = portfolio_performance(returns, weights)
 
-    st.subheader("📈 Performance cumulée du portefeuille")
+    st.subheader("Performance cumulée du portefeuille")
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.plot(cum_perf, label="Portfolio")
     ax.set_title("Performance cumulée")
@@ -125,13 +124,13 @@ else:
     st.pyplot(fig)
 
     # 5) Matrice de corrélation
-    st.subheader("🔗 Matrice de corrélation des actifs")
+    st.subheader("Matrice de corrélation")
     fig2, ax2 = plt.subplots(figsize=(6, 4))
     sns.heatmap(returns.corr(), annot=True, cmap="Blues", ax=ax2)
     st.pyplot(fig2)
 
     # 6) Metrics
-    st.subheader("📊 Metrics du portefeuille")
+    st.subheader("Metrics du portefeuille")
     sharpe = sharpe_ratio(port_returns)
     vol = port_returns.std() * np.sqrt(252)
     mdd = max_drawdown(cum_perf)
