@@ -9,7 +9,7 @@ import seaborn as sns
 st.set_page_config(page_title="Quant Dashboard CAC 40", layout="wide")
 
 st.title("Quant Dashboard – CAC 40")
-st.write("Welcome to our project : 
+st.write("Welcome to our project : ")
 
 # Parameters and data for CAC40 assets
 CAC40_ASSETS = {
