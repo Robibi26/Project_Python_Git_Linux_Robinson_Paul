@@ -29,7 +29,7 @@ if module == "Single Asset (Quant A)":
     
     # Period selection 
     period = st.selectbox(
-    "Choisissez la période des données :",
+    "Select the data period :",
     ["1mo", "3mo", "6mo", "1y","3y"] 
     )
 
@@ -39,27 +39,54 @@ if module == "Single Asset (Quant A)":
     
     st.write(data) # Display data 
 
-    # Display of price chart of EUR/USD
+    #Strategy selection
+    strategy = st.selectbox(
+    "Choose an investment strategy :",
+    ["Buy and Hold", "Momentum"])
+
+    close = data["Close"]#Closing prices
+
+    data["Price_norm"] = close / close.iloc[0] # Normalized prices
+    
+    # Buy and Hold strategy
+    if strategy == "Buy and Hold":        
+        data["Strategy_value"] = data["Price_norm"]
+    
+    # Momentum strategy
+    elif strategy == "Momentum":
+        window = st.slider("Momentum window (days)", 2, 30, 5)
+
+        # Trading signal:
+        # 1 = we invest if the price increased over the last 'window' days
+        # 0 = we do not invest 
+        signal = (close.pct_change(window) > 0).astype(int)
+
+       
+        daily_returns = close.pct_change()
+
+        # Strategy returns (with one day delay):
+        # if signal = 1 : we take the daily return
+        # if signal = 0 : return is 0 (we stay out of the marke
+        strategy_returns = signal.shift(1) * daily_returns
+
+        # Cumulative strategy value 
+        data["Strategy_value"] = (1 + strategy_returns.fillna(0)).cumprod()
+        
     fig, ax = plt.subplots()
-    ax.plot(data.index, data['Close'], label="EUR/USD - Prix de clôture")
-    ax.set_title(f"Graphique des prix de la paire EUR/USD ({period})")
+    ax.plot(data.index, data["Price_norm"], label="EUR/USD (normalized price)")
+    ax.plot(data.index, data["Strategy_value"], label=f"Strategy value ({strategy})")
+    ax.set_title(f"Price vs strategy ({period})")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Prix de Clôture")
+    ax.set_ylabel("Normalized value")
     ax.legend()
     st.pyplot(fig)
 
-    #Strategy selection
-    strategy = st.selectbox(
-    "Choisissez une stratégie d'investissement :",
-    ["Buy and Hold", "Momentum"]
-)
-
     # Performance metrics 
     def calculate_metrics(data):
-        daily_returns = data['Close'].pct_change() # Compute of daily returns 
+        daily_returns = data['Close'].pct_change().dropna() # Compute of daily returns 
 
         # Sharpe ratio
-        sharpe_ratio = daily_returns.mean() / daily_returns.std()
+        sharpe_ratio = (daily_returns.mean() / daily_returns.std()) * (252 ** 0.5) # Annualized Sharpe ratio
 
         # Max Drawdown
         cumulative_returns = (1 + daily_returns).cumprod()
@@ -80,21 +107,8 @@ if module == "Single Asset (Quant A)":
 
     st.write(f"Sharpe Ratio : {sharpe_ratio:.2f}")
     st.write(f"Max Drawdown : {max_drawdown:.2f}")
-    st.write(f"Rendement Moyen : {average_return:.2f}")
-    st.write(f"Volatilité : {volatility:.2f}")
-
-    # Buy and Hold strategy
-    if strategy == "Buy and Hold":
-        data['Buy_and_Hold'] = data['Close'] / data['Close'].iloc[0]
-        st.write("Stratégie Buy and Hold")
-        st.line_chart(data[['Close', 'Buy_and_Hold']])
-    
-    # Momentum strategy
-    elif strategy == "Momentum":
-        window = st.slider("Momentum window (days)", 2, 30, 5)
-        data['Momentum'] = data['Close'].pct_change(periods=window)
-        st.write("Stratégie Momentum")
-        st.line_chart(data[['Close', 'Momentum']])
+    st.write(f"Mean return : {average_return:.6f}")
+    st.write(f"Volatility : {volatility:.6f}")
 
 else:
     st.subheader("Module Portfolio Multi-Assets")
