@@ -11,6 +11,9 @@ st.set_page_config(page_title="Quant Dashboard CAC 40", layout="wide")
 st.title("Quant Dashboard – CAC 40")
 st.write("Welcome to our project : ")
 
+if st.button("Refresh data"):
+    st.cache_data.clear()
+    
 # Parameters and data for CAC40 assets
 CAC40_ASSETS = {
     "LVMH": "MC.PA",
@@ -59,8 +62,6 @@ else:
     st.write("""
     Construction of a CAC40 assets portfolio :
     """)
-    if st.button("Refresh data"):
-        st.cache_data.clear()
 
     # Assets selection
     selected_assets = st.multiselect(
