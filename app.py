@@ -5,10 +5,7 @@ import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
 import seaborn as sns
-from streamlit_autorefresh import st_autorefresh
 
-
-st_autorefresh(interval=5 * 60 * 1000, key="refresh")
 st.set_page_config(page_title="Quant Dashboard CAC 40", layout="wide")
 
 st.title("Quant Dashboard – CAC 40")
@@ -26,7 +23,8 @@ CAC40_ASSETS = {
 
 @st.cache_data(ttl=300)  # cache 5 minutes
 def load_prices(tickers, start="2018-01-01"):
-    return yf.download(tickers, start=start)["Close"].dropna()
+    data = yf.download(tickers, start=start)["Close"]
+    return data.dropna()
 
 def portfolio_performance(returns, weights):
     port_returns = (returns * weights).sum(axis=1)
@@ -61,6 +59,8 @@ else:
     st.write("""
     Construction of a CAC40 assets portfolio :
     """)
+    if st.button("Refresh data"):
+        st.cache_data.clear()
 
     # Assets selection
     selected_assets = st.multiselect(
