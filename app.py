@@ -100,13 +100,13 @@ else:
 
     # Portfolio performance
     port_returns, cum_perf = portfolio_performance(returns, weights)
-
-    st.subheader("Cumulate performance of the portfolio")
+    cum_perf_base100 = cum_perf * 100
+    st.subheader("Cumulative performance of the portfolio (Base 100)")
     fig, ax = plt.subplots(figsize=(10, 4))
-    ax.plot(cum_perf, label="Portfolio")
-    ax.set_title("Cumulated performance")
+    ax.plot(cum_perf_base100, label="Portfolio (Base 100)")
+    ax.set_title("Cumulative performance")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Cumulated value")
+    ax.set_ylabel("Base 100")
     ax.legend()
     st.pyplot(fig)
 
