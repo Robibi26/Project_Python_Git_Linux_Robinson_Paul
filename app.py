@@ -41,7 +41,7 @@ def max_drawdown(cum_returns):
     return drawdown.min()
 
 # Module choice
-st.header("Choisis ton module")
+st.header("Choose your module")
 module = st.radio(
     "Module",
     ["Single Asset (Quant A)", "Portfolio Multi-Assets (Quant B)"]
@@ -51,8 +51,6 @@ module = st.radio(
 # Quant A : Single asset 
 if module == "Single Asset (Quant A)":
     st.subheader("Module Single Asset")
-    st.write("Ici votre binôme affichera les stratégies sur une action du CAC 40 (ex : LVMH).")
-    st.info("Ton binôme pourra coder ici plus tard (backtest, graph, metrics).")
 
 # Quant B : Multi assets
 else:
