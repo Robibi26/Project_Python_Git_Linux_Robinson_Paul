@@ -119,7 +119,7 @@ else:
 
     # Plot assets
     for col in base100_assets.columns:
-        ax_main.plot(base100_assets.index, base100_assets[col], alpha=0.7, linewidth=1)
+        ax_main.plot(base100_assets.index, base100_assets[col], alpha=0.7, linewidth=1,label=col)
 
     # Plot portfolio
     ax_main.plot(base100_port.index, base100_port.values, linewidth=2.8, label="Portfolio (base 100)")
