@@ -73,7 +73,7 @@ else:
 
     tickers = [CAC40_ASSETS[a] for a in selected_assets]
 
-    # 2) Wheigts choice
+    # Wheigts choice
     st.subheader(" Wheight of asset in the portfolio")
     weights = []
     total_weight = 0
@@ -110,13 +110,33 @@ else:
     ax.legend()
     st.pyplot(fig)
 
+    st.subheader("Assets and Portfolio cumulative value")
+
+    base100_assets = (data / data.iloc[0]) * 100
+    base100_port = cum_perf * 100
+
+    fig_main, ax_main = plt.subplots(figsize=(12, 5))
+
+    # Plot assets
+    for col in base100_assets.columns:
+        ax_main.plot(base100_assets.index, base100_assets[col], alpha=0.7, linewidth=1)
+
+    # Plot portfolio
+    ax_main.plot(base100_port.index, base100_port.values, linewidth=2.8, label="Portfolio (base 100)")
+
+    ax_main.set_title("Assets and Portfolio cumulative value")
+    ax_main.set_xlabel("Date")
+    ax_main.set_ylabel("Base 100")
+    ax_main.legend()
+    st.pyplot(fig_main)
+
     # Correlation Matrix
     st.subheader("Correlation Matrix")
     fig2, ax2 = plt.subplots(figsize=(6, 4))
     sns.heatmap(returns.corr(), annot=True, cmap="Blues", ax=ax2)
     st.pyplot(fig2)
 
-    # 6) Metrics
+    # Metrics
     st.subheader("Portfolio metrics")
     sharpe = sharpe_ratio(port_returns)
     vol = port_returns.std() * np.sqrt(252)
