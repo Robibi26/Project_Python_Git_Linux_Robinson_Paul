@@ -73,7 +73,7 @@ if module == "Single Asset (Quant A)":
     ticker = "EURUSD=X"  #  EUR/USD ticker
     data = get_data(ticker,period)
 
-    
+    st.subheader("Data loading")
     st.write(data) # Display data 
 
     #Strategy selection
@@ -108,7 +108,7 @@ if module == "Single Asset (Quant A)":
 
         # Cumulative strategy value 
         data["Strategy_value"] = (1 + strategy_returns.fillna(0)).cumprod()
-        
+
     fig, ax = plt.subplots()
     ax.plot(data.index, data["Price_norm"], label="EUR/USD (normalized price)")
     ax.plot(data.index, data["Strategy_value"], label=f"Strategy value ({strategy})")
@@ -140,12 +140,17 @@ if module == "Single Asset (Quant A)":
         return sharpe_ratio, max_drawdown, average_return, volatility
 
     # Compute and display metrics
+    st.subheader("Performance metrics")
     sharpe_ratio, max_drawdown, average_return,volatility = calculate_metrics(data)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Sharpe Ratio", f"{sharpe_ratio:.2f}")
+    col2.metric("Volatility", f"{volatility:.2%}")
+    col3.metric("Max Drawdown", f"{max_drawdown:.2%}")
+    col4.metric("Mean return", f"{average_return:.6%}")
+    
 
-    st.write(f"Sharpe Ratio : {sharpe_ratio:.2f}")
-    st.write(f"Max Drawdown : {max_drawdown:.2f}")
-    st.write(f"Mean return : {average_return:.6f}")
-    st.write(f"Volatility : {volatility:.6f}")
+
 
 
 else:
