@@ -239,6 +239,6 @@ else:
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Sharpe Ratio", f"{sharpe:.2f}")
-    col2.metric("Annualized volatikity", f"{vol:.2%}")
+    col2.metric("Annualized volatility", f"{vol:.2%}")
     col3.metric("Max Drawdown", f"{mdd:.2%}")
 
