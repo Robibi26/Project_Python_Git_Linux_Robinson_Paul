@@ -52,5 +52,29 @@ The dashboard is composed of two main modules:
 - yFinance  
 - Git & GitHub  
 - Linux
+- AWS EC2  
+- Nginx 
+
+---
+
+## Deployment & Infrastructure
+
+### Linux Virtual Machine
+
+The application is deployed on a Linux virtual machine hosted on AWS EC2
+
+- OS: Ubuntu  
+- Cloud provider: AWS  
+- Instance type: t3.micro  
+- Public IPv4 enabled  
+- SSH access using key-based authentication  
+
+This setup ensures the application runs independently from local machines and can be accessed externally.
+
+---
+
+## ACCESS
+
+The application is publicly accessible at : http://56.228.42.115
 
 ---
